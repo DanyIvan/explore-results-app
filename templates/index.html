@@ -1,0 +1,99 @@
+<!DOCTYPE html> 
+<html>
+    <head>
+        <title>Atmos</title>
+        <link href="/static/app.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css" />
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">    
+    </head>
+    <style>
+        body,h1 {font-family: "Raleway", sans-serif}
+body, html {height: 100%}
+.bgimg {
+  background-image: url({{ url_for ('static', filename = '/atmos.jpg') }});
+  min-height: 100%;
+  background-position: center;
+  background-size: cover;
+}
+
+.optionItem{
+display: inline-block;
+margin-top: 20px;
+}
+.optionButton   {
+display: block;
+color: white;
+text-align: center;
+text-decoration: none;
+font-size: 1em;
+background-color: #ffffff00;
+border-color: aliceblue;
+cursor: pointer;
+margin-left: 10px;
+padding: 5px;
+}
+.optionIndex{
+display: block;
+color: white;
+text-align: center;
+text-decoration: none;
+font-size: 0.5em;
+background-color: #ffffff00;
+border-color: aliceblue;
+cursor: pointer;
+margin-left: 10px;
+padding: 5px;
+}
+
+header {
+    /* header styles */
+    width: 100%;
+    font-size: 2em;
+    font-weight: bold;
+    text-align: center;
+    background-image: url(https://www.vaisala.com/sites/default/files/styles/16_9_liftup_extra_large/public/images/LIFT-Mars%20the%20Red%20Planet-1600x900.jpg?itok=YXq-Cv1K);
+    background-position: center;
+    background-size: auto;
+    padding: 35px;
+    color: #fefefe;
+    text-shadow: 0 0 20px #000000;
+  }
+    </style>
+    <body>
+
+        <div class="bgimg w3-display-container w3-animate-opacity w3-text-white">
+          <div class="w3-display-middle">
+            <h1 class="w3-jumbo w3-animate-top">ATMOS MODEL</h1>
+            <hr class="w3-border-grey" style="margin:auto;width:40%">
+            <p class="w3-large w3-center">Experiments varying temperature</p>
+            <nav>
+                <ul id="options">
+                <li class="optionItem">
+                    <a href="/bcs">
+                        <button class="optionButton">
+                        Boundary Conditions
+                        </button>
+                    </a>
+                </li>
+                <li class="optionItem">
+                    <a href="/species">
+                        <button class="optionButton">
+                        Species
+                        </button>
+                    </a>
+                </li>
+                <li class="optionItem">
+                    <a href="/reactions">
+                        <button class="optionButton">
+                        Reactions
+                        </button>
+                    </a>
+                </li>
+                </ul>
+            </nav>
+          </div>
+        </div>
+    </body>
+</html>
