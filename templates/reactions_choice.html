@@ -24,28 +24,20 @@
     </header>
     <body>
         <div class="container" align="center" margin-top="10px">
-            <label>Select an species</label>
+            <label>Select a reaction</label>
             <select class="selectpicker" data-live-search="true">
-                <option value="">Species</option>
-                {% for item in species_list %}
-                    <option value="/species/{{item}}">{{item}}</option>
+                <option value="">Reactions</option>
+                {% for item in reaction_list %}
+                    <option value="/reactions/{{item}}">{{item}}</option>
                 {% endfor %}
             </select>
-            <button>
-                Make Plots
-            </button>
-        </div>
-        <div class="container-fluid" style="margin-top:40px"> 
-            <iframe src={{mixrat_html}} width="100%" height="600"></iframe>
-            <iframe src= {{atm_cols_html}} width="100%" height="600"></iframe>
-            <iframe src={{alt_html}} width="100%" height="600"></iframe>
         </div>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/bootstrap-select.min.js"></script>
         <script type="text/javascript">
             $('.selectpicker').change(function (e) {
-            const val = $(e.target).val(); 
+            const val = $(e.target).val().replaceAll(' ', ''); 
             console.log(val);
             const route = val;
             window.location = route;  

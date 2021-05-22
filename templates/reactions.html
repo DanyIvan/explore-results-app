@@ -2,7 +2,7 @@
 <html>
     <head>
         <title>Atmos</title>
-        <link href="app.css" rel="stylesheet">
+        <link href="/static/app.css" rel="stylesheet">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css" />
         <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
@@ -13,7 +13,7 @@
         <nav>
             <ul id="options">
             <li class="optionItem">
-                <a href="/bcs">
+                <a href="/">
                     <button class="optionIndex">
                     Go back to index
                     </button>
@@ -26,18 +26,28 @@
         <div class="container" align="center" margin-top="10px">
             <label>Select a reaction</label>
             <select class="selectpicker" data-live-search="true">
-                <!-- <option value="ketchup mustard">Hot Dog, Fries and a Soda</option>> -->
-                {% for item in reactions %}
-                    <option value="{{item}}">{{item}}</option>
+                <option value="">Reactions</option>
+                {% for item in reaction_list %}
+                    <option value="/reactions/{{item}}">{{item}}</option>
                 {% endfor %}
             </select>
-            <button>
-                Make Plots
-            </button>
+        </div>
+        <div class="container-fluid" style="margin-top:40px"> 
+            <iframe src={{rates_html}} width="100%" height="600"></iframe>
+            <iframe src= {{integrated_rates_html}} width="100%" height="600"></iframe>
+            <iframe src={{rates_alt_html}} width="100%" height="600"></iframe>
         </div>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/bootstrap-select.min.js"></script>
+        <script type="text/javascript">
+            $('.selectpicker').change(function (e) {
+            const val = $(e.target).val().replaceAll(' ', ''); 
+            console.log(val);
+            const route = val;
+            window.location = route;  
+            });
+        </script>
     </body>    
 </html>
     
