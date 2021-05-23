@@ -14,8 +14,11 @@ def plot_flow_O2_vs_mixrat(data, species):
     ncolors = len(data.temp_lb.unique())
     palette = sns.color_palette("coolwarm", ncolors)
     palette = [colors.to_hex(x) for x in palette]
+    range_y_min = max(data[species].min(), 1e-50)
     fig = px.scatter(data_frame=data, x='flow_O2', y=species,
                      symbol='converged', color='temp_lb', log_y=True, 
+                     range_x=[2e10, 4e13],
+                     range_y=[range_y_min, data[species].max()],
                      log_x=True, labels={
                          'flow_O2': 'Ground level O2 flux [pu]',
                          species: 'Mixig Ratio at LB',
@@ -35,8 +38,11 @@ def plot_flow_O2_vs_atm_cols(data, species):
     ncolors = len(species_data.temp_lb.unique())
     palette = sns.color_palette("coolwarm", ncolors)
     palette = [colors.to_hex(x) for x in palette]
+    range_y_min = max(species_data.atm_columns.min(), 1e-50)
     fig = px.scatter(data_frame=species_data, x='flow_O2', y='atm_columns',
-                     symbol='converged', color='temp_lb', log_y=True, 
+                     symbol='converged', color='temp_lb', log_y=True,
+                     range_x=[2e10, 4e13],
+                     range_y=[range_y_min, species_data.atm_columns.max()],
                      log_x=True, labels={
                          'flow_O2': 'Ground level O2 flux [pu]',
                          'atm_columns': 'Atmospheric column [molecules /cm^2]',
@@ -50,21 +56,23 @@ def plot_flow_O2_vs_atm_cols(data, species):
     return fig
 
 def plot_vars_vs_alt_by_flowO2(data, species):
-    data = data.astype({'temp_lb': str})
-    data.flow_O2 = data.flow_O2.apply(lambda col: '{:.1E}'.format(col))
-    # find fluxes that all temperatures have and only use 90 of them
-    group_by_count = data.groupby('flow_O2').count()
-    fluxes = group_by_count[group_by_count.ALT == 640].index
-    idxs = np.round(np.linspace(0, len(fluxes) - 1, 60)).\
+    data = data.iloc[0:-1:2]
+    temps = data.temp_lb.unique()
+    group_by_count = data[data.ALT == 0.25].groupby('flow_O2').sum()
+    fluxes = group_by_count[group_by_count.temp_lb == temps.sum()].index
+    idxs = np.round(np.linspace(0, len(fluxes) - 1, 50)).\
             astype(int)
     fluxes = fluxes[idxs]
     data = data[data.flow_O2.isin(fluxes)]
-    ncolors = len(data.temp_lb.unique())
+    data = data.astype({'temp_lb': str})
+    data.flow_O2 = data.flow_O2.apply(lambda col: '{:.2E}'.format(col))
+    ncolors = len(temps)
     palette = sns.color_palette("coolwarm", ncolors)
     palette = [colors.to_hex(x) for x in palette]
     range_x_min = max(data[species].min(), 1e-30)
     fig = px.line(data_frame=data, x=species, y='ALT', color='temp_lb', 
                      range_x = [range_x_min, data[species].max()],
+                     range_y = [0, 81],
                      log_x=True, labels={
                          'flow_O2': r'Ground level O2 flux [pu]',
                          species: 'Mixig Ratio at LB',
@@ -84,8 +92,11 @@ def plot_flow_O2_vs_rates(data, reaction):
     ncolors = len(data.temp_lb.unique())
     palette = sns.color_palette("coolwarm", ncolors)
     palette = [colors.to_hex(x) for x in palette]
+    range_y_min = max(data[reaction].min(), 1e-50)
     fig = px.scatter(data_frame=data, x='flow_O2', y=reaction,
                      symbol='converged', color='temp_lb', log_y=True, 
+                     range_x=[2e10, 4e13],
+                     range_y=[range_y_min, data[reaction].max()],
                      log_x=True, labels={
                          'flow_O2': 'Ground level O2 flux [pu]',
                          reaction: 'Reaction rate [molecules/cm^3 s]',
@@ -105,8 +116,11 @@ def plot_flow_O2_vs_integrated_rates(data, reaction):
     ncolors = len(reaction_data.temp_lb.unique())
     palette = sns.color_palette("coolwarm", ncolors)
     palette = [colors.to_hex(x) for x in palette]
+    range_y_min = max(reaction_data.integrated_rates.min(), 1e-50)
     fig = px.scatter(data_frame=reaction_data, x='flow_O2', y='integrated_rates',
                      symbol='converged', color='temp_lb', log_y=True, 
+                     range_x=[2e10, 4e13],
+                     range_y=[range_y_min, reaction_data.integrated_rates.max()],
                      log_x=True, labels={
                          'flow_O2': 'Ground level O2 flux [pu]',
                          'integrated_rates': 'Integrated reaction rate [molecules / cm^2 s]',
@@ -120,21 +134,25 @@ def plot_flow_O2_vs_integrated_rates(data, reaction):
     return fig
 
 def plot_rates_vs_alt(data, reaction):
-    data = data.astype({'temp_lb': str})
-    data.flow_O2 = data.flow_O2.apply(lambda col: '{:.1E}'.format(col))
     # find fluxes that all temperatures have and only use 90 of them
-    group_by_count = data.groupby('flow_O2').count()
-    fluxes = group_by_count[group_by_count.ALT == 1280].index
+    data = data.iloc[0:-1:2]
+    temps = data.temp_lb.unique()
+    group_by_count = data[data.ALT == 1].groupby('flow_O2').sum()
+    fluxes = group_by_count[group_by_count.temp_lb == temps.sum()].index
     idxs = np.round(np.linspace(0, len(fluxes) - 1, 50)).\
             astype(int)
     fluxes = fluxes[idxs]
     data = data[data.flow_O2.isin(fluxes)]
-    ncolors = len(data.temp_lb.unique())
+    data = data.astype({'temp_lb': str})
+    data.flow_O2 = data.flow_O2.apply(lambda col: '{:.2E}'.format(col))
+    ncolors = len(temps)
     palette = sns.color_palette("coolwarm", ncolors)
     palette = [colors.to_hex(x) for x in palette]
     range_x_min = max(data[reaction].min(), 1e-30)
+    range_x_min = max(data[reaction].min(), 1e-30)
     fig = px.line(data_frame=data, x=reaction, y='ALT', color='temp_lb', 
                      range_x = [range_x_min, data[reaction].max()],
+                     range_y = [0, 81],
                      log_x=True, labels={
                          'flow_O2': 'Ground level O2 flux [pu]',
                          reaction: 'Reaction rate [molecules / cm^3 s]',
